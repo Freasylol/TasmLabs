@@ -2,11 +2,29 @@
 .stack 100h
 .data
 	errorMessage db 'Error! Please enter num$'
+	n dw ?
 .code
 main:
+	mov ax, @data
+	mov ds, ax
+
     call readNum
-	mov ax, bx
-printEnteredNum:
+	mov n, bx
+	mov bx, n
+
+	mov cx, 1
+	cmp cx, n
+	jnle print
+cycle:
+	mov ax, 0
+	mov ax, cx
+	mul cx
+	cmp ax, bx
+	jnle print
+	inc cx
+	call cycle
+print:
+	mov ax, cx
     call printNum
 exit:
     mov ah, 04Ch
